@@ -1,0 +1,244 @@
+/*
+ * 樣式表 for Vertical Space Shooter
+ * 採用深色太空背景與簡潔的 UI，適合長時間遊玩。
+ */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at 50% 20%, #19254a, #0a1024 70%) no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e8eefc;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* 遊戲外框，讓整體居中且具有寬度限制 */
+#game-wrapper {
+  position: relative;
+  width: 640px;
+  max-width: 96vw;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  background: linear-gradient(#040b1a, #0e2040);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* UI 列容器在畫布頂部，以半透明背景顯示資訊 */
+#ui-bar {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+#xp-container {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  margin: 0 8px;
+  overflow: hidden;
+}
+
+#xp-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #73c4e3, #28a5f5);
+}
+
+/* 提示訊息區：顯示升級或遊戲事件 */
+#message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffd36a;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+/* 十字準星樣式：使用兩條線組成 */
+#crosshair {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  margin-top: -20px;
+  border: 2px solid rgba(200, 220, 255, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(200, 220, 255, 0.4);
+  pointer-events: none;
+  transition: transform 0.1s linear;
+}
+/* ===== 升級視窗 ===== */
+.upgrade-modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+}
+.upgrade-modal.show{ display:flex; }
+
+.upgrade-card{
+  width: min(560px, 92vw);
+  background: rgba(18,22,35,.92);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.45);
+}
+.upgrade-title{
+  font-size: 18px;
+  margin-bottom: 14px;
+  color: #fff;
+  letter-spacing: .5px;
+}
+.upgrade-choices{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.upgrade-btn{
+  text-align: left;
+  cursor: pointer;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  transition: transform .12s ease, background .12s ease;
+}
+.upgrade-btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.11);
+}
+.u-title{ font-weight: 700; margin-bottom: 4px; }
+.u-desc{ opacity: .85; font-size: 13px; line-height: 1.35; }
+
+/* ===== 準星小特效 ===== */
+#crosshair.pulse{
+  transform: translate(-50%, -50%) scale(1.08);
+  filter: drop-shadow(0 0 8px rgba(120,200,255,.9));
+}
+#crosshair{
+  transition: transform .12s ease, filter .12s ease;
+}
+
+/* ===== Screen Overlays ===== */
+.screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #f8f8f8;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.screen.show {
+  display: flex;
+}
+
+.screen-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.5);
+  z-index: -1;
+}
+
+.screen-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 20px;
+}
+
+.title {
+  font-size: 48px;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  font-size: 20px;
+  margin: 6px 0;
+  color: #ddd;
+}
+
+/* ===== 歷史紀錄 ===== */
+.history-section {
+  margin-top: 12px;
+  text-align: left;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.history-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f0f0f0;
+  margin-bottom: 4px;
+}
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.history-list li {
+  font-size: 16px;
+  color: #cfcfcf;
+  margin: 2px 0;
+}
+
+/* Upgrade button selected state for keyboard navigation */
+.upgrade-btn.selected {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 230, 120, 0.8);
+  box-shadow: 0 0 12px rgba(255, 230, 120, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Background images for screens */
+#startBg {
+  background-image: url('start_bg.png');
+}
+#endBg {
+  background-image: url('end_bg.png');
+}

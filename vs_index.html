@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vertical Space Shooter</title>
+  <!-- 引入外部樣式表 -->
+  <link rel="stylesheet" href="vs_style.css" />
+</head>
+
+
+<body>
+  <!-- Title Screen Overlay -->
+  <div id="startScreen" class="screen">
+    <div class="screen-bg" id="startBg"></div>
+    <div class="screen-content">
+      <h1 class="title">Vertical Space Shooter</h1>
+      <p class="subtitle">按 Enter 開始遊戲</p>
+      <p class="subtitle" id="highScoreRecord">最佳紀錄：0</p>
+      <!-- 歷史紀錄列表：顯示前幾次的高分 -->
+      <div id="history" class="history-section">
+        <p class="subtitle history-title">歷史紀錄</p>
+        <ol id="scoreHistory" class="history-list"></ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Screen Overlay -->
+  <div id="endScreen" class="screen">
+    <div class="screen-bg" id="endBg"></div>
+    <div class="screen-content" id="endContent">
+      <h1 class="title">Game Over</h1>
+      <p class="subtitle" id="finalScore">你的分數：</p>
+      <p class="subtitle">按 Enter 重新開始</p>
+    </div>
+  </div>
+
+  <!-- 升級三選一視窗 -->
+  <div id="upgradeModal" class="upgrade-modal">
+    <div class="upgrade-card">
+      <div id="upgradeTitle" class="upgrade-title">Level Up</div>
+      <div id="upgradeChoices" class="upgrade-choices"></div>
+    </div>
+  </div>
+  <!-- 遊戲容器：包含畫布與 UI -->
+  <div id="game-wrapper">
+    <!-- 遊戲畫布；尺寸採用較高的比例以符合直向視覺 -->
+    <canvas id="gameCanvas" width="640" height="900"></canvas>
+    <!-- 頂部 UI：顯示得分、等級、經驗條、生命值 -->
+    <div id="ui-bar">
+      <div id="score">Score: 0</div>
+      <div id="level">Level: 1</div>
+      <div id="xp-container">
+        <div id="xp-bar"></div>
+      </div>
+      <div id="hp">HP: 100</div>
+    </div>
+    <!-- 用於顯示升級資訊或技能提示的提示欄 -->
+    <div id="message"></div>
+    <!-- 十字準星效果容器，使用絕對定位在畫布上方 -->
+    <div id="crosshair"></div>
+  </div>
+
+  <!-- 載入遊戲邏輯腳本 -->
+  <script src="vs_script.js"></script>
+</body>
+</html>
