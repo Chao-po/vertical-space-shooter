@@ -1321,19 +1321,33 @@ function drawEnemy(e) {
 
 // ===== Fade / Restart Animation =====
 function updateFade(dt) {
-  if (!game || game.fade.dir === 0) return;
+  // 防呆：沒有 game 或沒有 fade 物件就不跑
+  if (!game || !game.fade || game.fade.dir === 0) return;
 
-  const speed = 0.0022; // 速度
+  // 淡入淡出速度（可調）
+  const speed = 0.0022;
+
+  // 更新透明度
   game.fade.alpha += game.fade.dir * speed * dt;
 
-  if (game.fade.dir < 0 && game.fade.alpha <= 0) {
-    game.fade.alpha = 0;
+  // 夾在 0 ~ 1 之間，避免超出導致卡住
+  game.fade.alpha = Math.max(0, Math.min(1, game.fade.alpha));
+
+  // 到達終點時停止
+  if (
+    (game.fade.dir < 0 && game.fade.alpha === 0) ||
+    (game.fade.dir > 0 && game.fade.alpha === 1)
+  ) {
     game.fade.dir = 0;
+
+    // 🔥 如果之後你想接動畫完成後的事件（例如顯示升級視窗）
+    if (typeof game.fade.onComplete === 'function') {
+      game.fade.onComplete();
+      game.fade.onComplete = null; // 用完清掉，避免重複觸發
+    }
   }
-  if (game.fade.dir > 0 && game.fade.alpha >= 1) {
-    game.fade.alpha = 1;
-    game.fade.dir = 0;
-  }
+}
+
 }
 
 function startRestartFade() {
